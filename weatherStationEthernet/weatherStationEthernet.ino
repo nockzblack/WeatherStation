@@ -1,17 +1,14 @@
-// Arduino Webserver with Ethernet shield ENC28J60. Static IP or DHCP.
-// Webpage shows temperature from sensor DS18B20 and time since reset.
-// Library https://github.com/jcw/ethercard ethercard-master rename to ethercardmaster 
-// 2010-05-28 <jc@wippler.nl> http://opensource.org/licenses/mit-license.php
-// Library https://github.com/milesburton/Arduino-Temperature-Control-Library rename to DallasTemperature
-// Dallas library is buggy. Examples compiled often show -127. 
-// Code adopted by Janis Alnis 2016.11.30. Compiled with Arduino IDE version 1.0.0. 
+// Arduino Webserver with module Ethernet  ENC28J60
+// Webpage shows data for a Weather Station
+// Code adopted by Fernando Benavides @Nockzblack 2018.04.29
 
-// ENC SCK -> Arduino pin 13 
-// ENC SO  -> Arduino pin 12
-// ENC SI  -> Arduino pin 11
-// ENC CS  -> Arduino pin 10  (some other online examples use pin 8)
-// ENC VCC ->  3V3 from USB serial adapter CP2102 or PL2303 but not enough from CH340
-// ENC GND -> GND
+// ENCJ2860  -> Arduino
+// SCK       ->  pin 13 
+// SO        ->  pin 12
+// SI        ->  pin 11
+// CS        ->  pin 10
+// VCC       ->  3V3 
+// GND       -> GND
 
 #include <EtherCard.h>
 
