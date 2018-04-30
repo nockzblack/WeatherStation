@@ -1,0 +1,21 @@
+int analogPin = 2;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  
+  int sensorValue = analogRead(analogPin);
+
+  Serial.print("Air Quality = ");
+  Serial.print(sensorValue);
+  Serial.print("*PPM");
+
+  Serial.println();
+
+  delay(1000);
+
+  //Entre más grande sea el valor arrojado por el sensor, es menor la calidad del aire analizada. 
+  //La lectura es arrojada en partes por millon. 
+}
