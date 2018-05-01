@@ -4,10 +4,13 @@
 
 #include "DHT.h" // DTH11 ambiental humidty sensor  
 
-OneWire auxWire(3); // temp sentor to pin 3 on Arduino
+OneWire auxWire(3); // declaring temp sensor to pin 3 on Arduino
 DallasTemperature tempSensor(&auxWire);
 
-DHT dht(4, DHT11); // ambiental humidty sentor to pin 4 on Arduino
+DHT dht(4, DHT11); // declaring ambiental humidity sentor to pin 4 on Arduino
+const int groundHumidity = A0; // declaring ground humidity sensor to analog input A0
+
+
 
 void setup() {
   
@@ -15,12 +18,18 @@ void setup() {
   
   tempSensor.begin(); // Initializing temperature sensor (DS18B20)
   dht.begin(); // Initializing ambiental humidity sensor (DTH11)
+  pinMode(groundHumidity, INPUT); // Initializing ground humidity sensor
+  
 }
 
 void loop() {
   float currentTemp = getTemp();
   float currentAmbientalHumidity = getAmbientalHumidity();
+  int currentGroundHumidity = getGroundHumidity();
+}
 
+int getGroundHumidity() {
+  return analogRead(groundHumidity);
 }
 
 float getAmbientalHumidity() {
