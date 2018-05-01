@@ -2,7 +2,7 @@
 #include <OneWire.h> // DS18B20 temp sensor            
 #include <DallasTemperature.h> // DS18B20 temp sensor 
 
-#include "DHT.h" // DTH11 ambiental humidty sensor  
+#include <DHT.h> // DTH11 ambiental humidty sensor  
 
 OneWire auxWire(3); // declaring temp sensor to pin 3 on Arduino
 DallasTemperature tempSensor(&auxWire);
