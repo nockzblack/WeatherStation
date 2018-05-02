@@ -33,6 +33,7 @@ static byte myip[] = { 192,168,1,200 }; // static ip address
 // VCC       ->  3V3 
 // GND       -> GND
 
+long currentTemp = 0;
 
 void setup() {
   
@@ -55,6 +56,8 @@ void setup() {
       Serial.println("DHCP failed");
   #endif
     ether.printIp("IP:  ", ether.myip);
+  
+  currentTemp = getTemp();
 }
 
 
@@ -62,7 +65,7 @@ int sec = 0;
 
 void loop() {
   sec++;
-  Serial.println(sec);
+  //Serial.println(sec);
  /*
   //float currentTemp = getTemp();
   long ligthIntensity = 1344;
@@ -76,7 +79,6 @@ void loop() {
   
   long airHumidity = 20;
  
-  long currentTemp = getTemp();
   
   long currentAmbientalHumidity = dht.readHumidity();
   int currentGroundHumidity = getGroundHumidity();
