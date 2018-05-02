@@ -6,8 +6,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class WeatherView extends JPanel{
 	
@@ -25,13 +30,17 @@ public class WeatherView extends JPanel{
 				 fTemp;
 	private Image fondo;
 	
+	private JButton btUpdate;
 	
-	public WeatherView(Data dataToDisplay) {
+	private MainWindow app;
+	
+	
+	public WeatherView(Data dataToDisplay, MainWindow app) {
 		super();
 		this.setPreferredSize(new Dimension(600,590));
 		this.setBackground(Color.GRAY);
-		this.fondo = new ImageIcon("/Users/Fer/Desktop/GUI/src/gui/cielo.jpg").getImage();
-		
+		this.fondo = new ImageIcon("/Users/Fer/Desktop/java-guu/WeatherStation/gui/src/gui/cielo.jpg").getImage();
+		this.app = app;
 		//FUENTES
 		fuente = new Font("Tahoma", Font.BOLD, 20); 
 		fTemp = new Font("Tahoma", Font.CENTER_BASELINE, 55);
@@ -40,6 +49,9 @@ public class WeatherView extends JPanel{
 		datos = dataToDisplay;
 		//datos = new Data();
 		Actualizar(datos);
+		
+		// BOTONES
+		this.btUpdate = new JButton("Actualizar");
 		
 		//ETIQUETAS
 		this.Cal = new JLabel("Calidad del aire");
@@ -56,6 +68,7 @@ public class WeatherView extends JPanel{
 		this.HumS.setForeground(Color.WHITE);
 		
 		//Set Bounds
+		
 		this.Cal.setBounds(10, 230, 400, 80);
 		this.Hum.setBounds(10, 320, 400, 80);
 		this.Luz.setBounds(10, 410, 400, 80);
@@ -66,6 +79,7 @@ public class WeatherView extends JPanel{
 		this.jlHumedad.setBounds(260,320,200,80);
 		this.jlLuz.setBounds(260,410,200,80);
 		this.jlHumedadSuelo.setBounds(260,500,200,80);
+		this.btUpdate.setBounds(300, 70, 200, 80);
 		
 		this.setLayout(null);
 		
@@ -78,7 +92,15 @@ public class WeatherView extends JPanel{
 		this.add(this.jlHumedad);
 		this.add(this.jlLuz);
 		this.add(this.jlHumedadSuelo);
-		 
+		this.add(this.btUpdate);
+		
+		btUpdate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WeatherView.this.app.showWeatherView();
+			}
+		});
 		
 	}
 	
@@ -89,28 +111,28 @@ public class WeatherView extends JPanel{
 		this.jlTemperatura.setForeground(Color.WHITE);
 		//jlCalidad
 		this.jlCalidad = new JLabel(datos.getCalidad() + " ppm");
-		this.jlCalidad.setOpaque(true);
+		//this.jlCalidad.setOpaque(true);
 		this.jlCalidad.setFont(fuente);
 		this.jlCalidad.setForeground(Color.WHITE);
-		this.jlCalidad.setBackground(Color.LIGHT_GRAY);
+		//this.jlCalidad.setBackground(Color.LIGHT_GRAY);
 		//jlHumedad
 		this.jlHumedad = new JLabel(datos.getHumedad() + " %");
-		this.jlHumedad.setOpaque(true);
+		//this.jlHumedad.setOpaque(true);
 		this.jlHumedad.setFont(fuente);
 		this.jlHumedad.setForeground(Color.WHITE);
-		this.jlHumedad.setBackground(Color.LIGHT_GRAY);
+		//this.jlHumedad.setBackground(Color.LIGHT_GRAY);
 		//jlLuz
 		this.jlLuz = new JLabel(datos.getLuz() + " luxes");
-		this.jlLuz.setOpaque(true);
+		//this.jlLuz.setOpaque(true);
 		this.jlLuz.setFont(fuente);
 		this.jlLuz.setForeground(Color.WHITE);
-		this.jlLuz.setBackground(Color.LIGHT_GRAY);
+		//this.jlLuz.setBackground(Color.LIGHT_GRAY);
 		//jlHumedadSuelo
 		this.jlHumedadSuelo = new JLabel(datos.getHumedadSuelo() + " %");
-		this.jlHumedadSuelo.setOpaque(true);
+		//this.jlHumedadSuelo.setOpaque(true);
 		this.jlHumedadSuelo.setFont(fuente);
 		this.jlHumedadSuelo.setForeground(Color.WHITE);
-		this.jlHumedadSuelo.setBackground(Color.LIGHT_GRAY);
+		//this.jlHumedadSuelo.setBackground(Color.LIGHT_GRAY);
 		
 	}
 	

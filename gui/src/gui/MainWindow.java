@@ -1,6 +1,6 @@
 package gui;
-import java.awt.Dimension;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -9,6 +9,7 @@ public class MainWindow extends JFrame {
 	private HttpProtocol serverConnection;
 	private WeatherView auxView;
 	private Data weatherData;
+	private String ipAddress;
 	
 	public MainWindow() {
 		super("Arduino Weather Station GUI");
@@ -25,7 +26,7 @@ public class MainWindow extends JFrame {
 	}
 	
 	public void initWeatherView() {
-		this.auxView = new WeatherView(this.weatherData);
+		this.auxView = new WeatherView(this.weatherData, this);
 		this.add(auxView);
 	}
 	
@@ -33,38 +34,51 @@ public class MainWindow extends JFrame {
 		this.weatherData = new Data(temp, airQuality, groundHumidity, airHumidty);
 	}
 	
+	public void getIp() {
+		this.ipAddress = "http://";
+		this.ipAddress += JOptionPane.showInputDialog(this,"Ingresa la dirección IP:");
+	}
 	
-	
-	public static void main (String[] args) {
-		MainWindow app = new MainWindow();
-		
-		String ipAddress = "http://";
-		ipAddress += JOptionPane.showInputDialog(app,"Ingresa la dirección IP:");
+	public void showWeatherView() {
 		String strData = "";
 		
 		try {
-			strData = app.initServerConnection(ipAddress);
+			strData = this.initServerConnection(this.ipAddress);
 			
 			String htmlCode = strData.substring(46);
 			String strTemp = htmlCode.substring(47,49);
 			String strAirQuality = htmlCode.substring(79,83);
-			String strGroundHumidity = htmlCode.substring(115,118);
+			String strGroundHumidity = htmlCode.substring(115,119);
 			String strAirHumidity = htmlCode.substring(152,154);
-			
+			/*
+			System.out.println(htmlCode);
+			System.out.println(strTemp);
+			System.out.println(strAirQuality);
+			System.out.println(strGroundHumidity);
+			System.out.println(strAirHumidity);
+			*/
+
 			double temp = Double.parseDouble(strTemp);
 			double airQuality = Double.parseDouble(strAirQuality);
 			int groundHumidity = Integer.parseInt(strGroundHumidity);
 			int airHumidity = Integer.parseInt(strAirHumidity);
 			
-			app.initData(temp, airQuality, airHumidity, groundHumidity);
-			app.initWeatherView();
-			app.revalidate();
-			app.repaint();
+			this.initData(temp, airQuality, groundHumidity, airHumidity);
+			this.initWeatherView();
+			this.revalidate();
+			this.repaint();
 			
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(app,"Error en la IP:\n" +  ex.getMessage());
+			JOptionPane.showMessageDialog(this,"Error en la IP:\n" +  ex.getMessage());
 		}
-		
+	}
+	
+	
+	
+	public static void main (String[] args) {
+		MainWindow app = new MainWindow();
+		app.getIp();
+		app.showWeatherView();
 		
 	}
 }
