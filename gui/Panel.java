@@ -1,3 +1,5 @@
+package gui;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,7 +30,7 @@ public class Panel extends JPanel{
 		super();
 		this.setPreferredSize(new Dimension(600,590));
 		this.setBackground(Color.GRAY);
-		this.fondo = new ImageIcon("Cielo.jpg").getImage();
+		this.fondo = new ImageIcon("gui/Cielo.jpg").getImage();
 		
 		//FUENTES
 		fuente = new Font("Tahoma", Font.BOLD, 20); 
@@ -82,7 +84,7 @@ public class Panel extends JPanel{
 	
 	public void Actualizar(Data datos) {
 		//jlTemperatura
-		this.jlTemperatura = new JLabel(datos.getTemperatura() + "°C");
+		this.jlTemperatura = new JLabel(datos.getTemperatura() + "ÂºC");
 		this.jlTemperatura.setFont(fTemp);
 		this.jlTemperatura.setForeground(Color.WHITE);
 		//jlCalidad

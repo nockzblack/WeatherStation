@@ -1,3 +1,4 @@
+package gui;
 
 public class Data {
 	private int temperatura,
