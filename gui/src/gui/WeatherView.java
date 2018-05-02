@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Panel extends JPanel{
+public class WeatherView extends JPanel{
 	
 	private JLabel jlTemperatura,
 					jlCalidad,
@@ -22,22 +22,22 @@ public class Panel extends JPanel{
 					HumS;
 	private Data datos;
 	private Font fuente,
-					fTemp;
+				 fTemp;
 	private Image fondo;
 	
 	
-	public Panel() {
+	public WeatherView(Data dataToDisplay) {
 		super();
 		this.setPreferredSize(new Dimension(600,590));
 		this.setBackground(Color.GRAY);
-		this.fondo = new ImageIcon("gui/Cielo.jpg").getImage();
+		this.fondo = new ImageIcon("/Users/Fer/Desktop/GUI/src/gui/cielo.jpg").getImage();
 		
 		//FUENTES
 		fuente = new Font("Tahoma", Font.BOLD, 20); 
-		fTemp = new Font("Tahoma", Font.CENTER_BASELINE, 60);
+		fTemp = new Font("Tahoma", Font.CENTER_BASELINE, 55);
 		
 		//INICIALIZAR EL OBJETO DATA
-		datos = new Data(25,25,65,85,32);
+		datos = dataToDisplay;
 		//datos = new Data();
 		Actualizar(datos);
 		
@@ -88,7 +88,7 @@ public class Panel extends JPanel{
 		this.jlTemperatura.setFont(fTemp);
 		this.jlTemperatura.setForeground(Color.WHITE);
 		//jlCalidad
-		this.jlCalidad = new JLabel(datos.getCalidad() + " puntos IMECA");
+		this.jlCalidad = new JLabel(datos.getCalidad() + " ppm");
 		this.jlCalidad.setOpaque(true);
 		this.jlCalidad.setFont(fuente);
 		this.jlCalidad.setForeground(Color.WHITE);
@@ -100,7 +100,7 @@ public class Panel extends JPanel{
 		this.jlHumedad.setForeground(Color.WHITE);
 		this.jlHumedad.setBackground(Color.LIGHT_GRAY);
 		//jlLuz
-		this.jlLuz = new JLabel(datos.getLuz() + " puntos luz");
+		this.jlLuz = new JLabel(datos.getLuz() + " luxes");
 		this.jlLuz.setOpaque(true);
 		this.jlLuz.setFont(fuente);
 		this.jlLuz.setForeground(Color.WHITE);
@@ -117,8 +117,8 @@ public class Panel extends JPanel{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.WHITE);
 		g.drawImage(this.fondo, 0, 0, this.getWidth(), this.getHeight(), this);
+		g.setColor(Color.WHITE);
 		g.fillRect(240, 0, 10, 610);
 		g.fillRect(0,200, 620, 10);
 		
