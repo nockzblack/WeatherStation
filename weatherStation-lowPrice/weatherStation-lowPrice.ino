@@ -12,17 +12,13 @@ const int groundHumidity = A0; // declaring ground humidity sensor to analog inp
 const int airQuality = A1; // declaring air Quiality  sensor to analog input A1 on arduino
 
 
-
 // Decalaring Ethernet values nedeed
 static byte macAdress[] = { 0x74,0x69,0x69,0x2D,0x30,0x33 }; // ethernet interface mac address, must be unique on the LAN
 byte Ethernet::buffer[500]; 
 BufferFiller auxBuffer;   //This object populates network send and receive buffers.
-static byte IPAdress[] = { 192,168,1,200 }; // static ip address
-
-
 #define STATIC 0  //  DHCP=0 ,  static=1
 #if STATIC  
-static byte myip[] = { 192,168,1,200 }; // static ip address
+static byte IPAdress[] = { 192,168,1,200 }; // static ip address
 #endif
 
 // ENCJ2860  -> Arduino
@@ -33,16 +29,21 @@ static byte myip[] = { 192,168,1,200 }; // static ip address
 // VCC       ->  3V3 
 // GND       -> GND
 
+
+unsigned long milisSec = 0;
 long currentTemp = 0;
+long currentAmbientalHumidity = 0;
+int currentGroundHumidity = 0;
+int currentAirQuality = 0;
 
 void setup() {
   
   Serial.begin(9600); // Initializing serial comunication
-  
   tempSensor.begin(); // Initializing temperature sensor (DS18B20)
   dht.begin(); // Initializing ambiental humidity sensor (DTH11)
   pinMode(groundHumidity, INPUT); // Initializing ground humidity sensor
   pinMode(airQuality, INPUT); // Initializing air Quality  sensor
+  
   // Initializing Ethernet values
   // Mac Address
   if (ether.begin(sizeof Ethernet::buffer, macAdress) == 0) {
@@ -50,39 +51,34 @@ void setup() {
   }
 
   #if STATIC 
-    ether.staticSetup(myip);
+    ether.staticSetup(IPAdress);
   #else
     if (!ether.dhcpSetup()) 
       Serial.println("DHCP failed");
   #endif
     ether.printIp("IP:  ", ether.myip);
-  
+
+  milisSec = 0;
   currentTemp = getTemp();
+  currentAmbientalHumidity = dht.readHumidity();
+  currentGroundHumidity = getGroundHumidity();
+  currentAirQuality = getAirQuality();
+
 }
 
 
-int sec = 0;
 
 void loop() {
-  sec++;
-  //Serial.println(sec);
- /*
-  //float currentTemp = getTemp();
-  long ligthIntensity = 1344;
-  float currentAmbientalHumidity = getAmbientalHumidity();
-  int currentGroundHumidity = getGroundHumidity();
-  int currentAirQuality = getAirQuality();
-  */
+  
+  if (milisSec == 180000) {
+    currentTemp = getTemp();
+    currentAmbientalHumidity = dht.readHumidity();
+    currentGroundHumidity = getGroundHumidity();
+    currentAirQuality = getAirQuality();
+    milisSec = 0;
+  }
+  
 
-  
-  //long currentTemp = 28.0;
-  
-  long airHumidity = 20;
- 
-  
-  long currentAmbientalHumidity = dht.readHumidity();
-  int currentGroundHumidity = getGroundHumidity();
-  int currentAirQuality = getAirQuality();
   
 
   word len = ether.packetReceive(); // polls for new incoming data and copies it into the global buffer. The return value is the size of this packet
@@ -91,7 +87,7 @@ void loop() {
   // The return value is the offset in the global packet buffer where incoming TCP data can be found (or zero if there is none)
   
   if (pos) { // if valid tcp data received send web page
-      ether.httpServerReply(htmlPage(currentTemp,currentAirQuality, airHumidity, currentGroundHumidity)); // Send a respons to a HTTP request.
+      ether.httpServerReply(htmlPage(currentTemp,currentAirQuality, currentAmbientalHumidity, currentGroundHumidity)); // Send a respons to a HTTP request.
     }
 
   //delay(100);
@@ -116,6 +112,8 @@ void loop() {
   Serial.println("\n");
   Serial.println("\n");
   */
+
+  milisSec++;
 }
 
 int getAirQuality() {
@@ -169,8 +167,7 @@ static word htmlPage(long temp, long airQuality, long airHumidity, long groundHu
         "</body></html>"
     ), temp, airQuality, groundHumidity, airHumidity);
 
-  //"<h3>Intensida de Luz: $L luxes</h3>"
-  delay(2000);
+  delay(10);
   return auxBuffer.position();
 }
 
