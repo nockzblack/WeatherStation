@@ -21,6 +21,9 @@ BufferFiller auxBuffer;   //This object populates network send and receive buffe
 static byte IPAdress[] = { 192,168,1,200 }; // static ip address
 #endif
 
+
+
+
 // ENCJ2860  -> Arduino
 // SCK       ->  pin 13 
 // SO        ->  pin 12
@@ -39,10 +42,13 @@ int currentAirQuality = 0;
 void setup() {
   
   Serial.begin(9600); // Initializing serial comunication
+  Serial.println("Serial comunication initialized");
   tempSensor.begin(); // Initializing temperature sensor (DS18B20)
   dht.begin(); // Initializing ambiental humidity sensor (DTH11)
   pinMode(groundHumidity, INPUT); // Initializing ground humidity sensor
   pinMode(airQuality, INPUT); // Initializing air Quality  sensor
+
+  /*
   
   // Initializing Ethernet values
   // Mac Address
@@ -58,6 +64,8 @@ void setup() {
   #endif
     ether.printIp("IP:  ", ether.myip);
 
+  */
+
   milisSec = 0;
   currentTemp = getTemp();
   currentAmbientalHumidity = dht.readHumidity();
@@ -70,17 +78,28 @@ void setup() {
 
 void loop() {
   
-  if (milisSec == 180000) {
+  //if (milisSec == 6000) { // 3 minutes to read the data from the enviroment 180000
     currentTemp = getTemp();
     currentAmbientalHumidity = dht.readHumidity();
     currentGroundHumidity = getGroundHumidity();
     currentAirQuality = getAirQuality();
     milisSec = 0;
-  }
+
+    Serial.print("Temp: ");
+    Serial.println(getTemp());
+    Serial.print("Air Humidity: ");
+    Serial.println(dht.readHumidity() + '%');
+    Serial.print("Ground Humidity: ");
+    Serial.println(getGroundHumidity());
+    Serial.print("Air Quality: ");
+    Serial.println(getAirQuality());
+    Serial.println("------------ \n \n");
+    
+  //}
   
 
   
-
+  /*
   word len = ether.packetReceive(); // polls for new incoming data and copies it into the global buffer. The return value is the size of this packet
   
   word pos = ether.packetLoop(len); // looks at the incoming data and takes care of low-level responses
@@ -90,30 +109,9 @@ void loop() {
       ether.httpServerReply(htmlPage(currentTemp,currentAirQuality, currentAmbientalHumidity, currentGroundHumidity)); // Send a respons to a HTTP request.
     }
 
-  //delay(100);
-  /*
-  Serial.print("Temp = ");
-  Serial.print(currentTemp);
-  Serial.println("ºC");
-  
-  
-  Serial.print("Ambiental Humidity = ");
-  Serial.print(currentAmbientalHumidity);
-  Serial.println("%");
- 
-  Serial.print("Ground Humidity = ");
-  Serial.print(currentGroundHumidity);
-  Serial.println("Escala desconocina");
-  
-  Serial.print("Air Quality = ");
-  Serial.print(currentAirQuality);
-  Serial.println("*Particulas por Millon");
-  Serial.println("\n");
-  Serial.println("\n");
-  Serial.println("\n");
-  */
 
   milisSec++;
+  */
 }
 
 int getAirQuality() {
@@ -134,9 +132,9 @@ float getAmbientalHumidity() {
   return ambientalHumidty;
 }
 
-long getTemp() {
+float getTemp() {
   tempSensor.requestTemperatures();
-  long temp = tempSensor.getTempCByIndex(0);
+  float temp = tempSensor.getTempCByIndex(0);
   return temp;
 }
 
