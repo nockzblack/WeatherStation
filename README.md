@@ -1,8 +1,16 @@
 # WeatherStation
 An Arduino project for a low cost weather station
 
-## Team
-### Engineers
+The objective of this branch is make improves in this project:
+
+# Things to Fix:
++ Problem with the decimal numbers
+
+# Thing to Improve/Add:
++ An app where is possible to see the data retrieved from the weather station
++ An database to recopile data through the time
+
+###
+
+### Engineer
 - Fernando Benavides, [nockzblack](https://github.com/nockzblack)
-- Javier Aguayo, [Javier2405](https://github.com/Javier2405)
-- Sergio Tostado, [SergioTA01229274](https://github.com/SergioTA01229274)
