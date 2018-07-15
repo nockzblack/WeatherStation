@@ -4,11 +4,34 @@
 #include <DHT.h> // DTH11 ambiental humidty sensor 
 #include <EtherCard.h>
 
+/*
+ *  Digital Temp Sensor DS18B20
+ *  
+ *  Temp Range: -55 a 125°C
+ *  Power: 3.0 V a 5.5 V
+ *  Accuracy: ±0.5°C (de -10°C a +85°C)
+ *  
+ */
 OneWire auxWire(3); // declaring temp sensor to pin 3 on Arduino
 DallasTemperature tempSensor(&auxWire);
 
+
+
+/*
+ *  Humidity Sensor DHT11
+ *  Power: 3 y 5 volts
+ *  Good for 20-80% humidity readings with 5% accuracy
+ */
 DHT dht(4, DHT11); // declaring ambiental humidity sentor to pin 4 on Arduino
+
+
+
+/*
+ * Air Quality sensor MQ135
+ * Measure NH3, NOx, alcohol, Benzene, smoke, CO2,
+ */
 const int groundHumidity = A0; // declaring ground humidity sensor to analog input A0
+
 const int airQuality = A1; // declaring air Quiality  sensor to analog input A1 on arduino
 
 
