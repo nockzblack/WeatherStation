@@ -24,7 +24,9 @@ class ViewController: UIViewController {
     
     
     // IBActions
-    @IBOutlet weak var updateDataValues: UIButton!
+    @IBAction func updateDataValues(_ sender: UIButton) {
+        requestDataFromServer(urlToRequestStr: "http://192.168.1.200")
+    }
     
     
     // Funcs
@@ -38,16 +40,40 @@ class ViewController: UIViewController {
             if possibleError != nil {
                 print(possibleError!)
             } else {
-                let dataStr = NSString(data: dataReceived!, encoding: String.Encoding.utf8.rawValue)
+                let dataNSStr = NSString(data: dataReceived!, encoding: String.Encoding.utf8.rawValue)
                 
-                print(dataStr!)
+                let dataStr = String(dataNSStr!)
                 
+                let temp = self.getNumberAfter(indentifier: "Temp:", in: dataStr, lenOfData: 5)
+                //print(temp)
+                //dataStr
+                
+                // Example of data received from server
+                /* <meta http-equiv='refresh' content='1'/><body><html><h1>Whether Station</h1><h3>Temp: 27.68 C </h3><h3>Calidad del Aire: 163 ppm </h3><h3>Humedad del Suelo: 968 </h3><h3>Humedad del Ambiemte: 63.0 %</h3></body></html> */
+                
+                // Execute asincronamente
+                DispatchQueue.main.sync (execute: {
+                    self.tempDataLabel.text! = String(temp)
+                })
+
                 
                 
             }
         }
         
         task.resume()
+    }
+    
+    func getNumberAfter(indentifier:String, in auxString:String, lenOfData:Int) -> Double {
+        
+        let tempRange = auxString.range(of: indentifier)
+        //let startTempIndex = tempRange!.upperBound
+        let startTempIndex = auxString.index(tempRange!.upperBound, offsetBy: 1)
+        let endTempIndex = auxString.index(tempRange!.upperBound, offsetBy: lenOfData + 1)
+        let newRange = startTempIndex..<endTempIndex
+        let tempStr = auxString[newRange]
+        let tempDouble = Double(tempStr)
+        return tempDouble!
     }
     
     // System funcs

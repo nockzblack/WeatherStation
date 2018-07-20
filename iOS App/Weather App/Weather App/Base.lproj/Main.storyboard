@@ -117,6 +117,9 @@
                                 <state key="normal" title="Update Values">
                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="updateDataValues:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n1q-dK-qxQ"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.792156862745098" blue="0.17254901960784313" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -155,7 +158,6 @@
                         <outlet property="airQualityDataLabel" destination="NK0-kv-v2C" id="QkH-ai-RPt"/>
                         <outlet property="humidityDataLabel" destination="Twf-82-gLK" id="XSM-Hi-CRz"/>
                         <outlet property="tempDataLabel" destination="PiD-5z-h8R" id="Aol-XI-LCL"/>
-                        <outlet property="updateDataValues" destination="d3l-vN-rh7" id="Gfg-6j-HHd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
