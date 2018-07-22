@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     
     // MARK: Vars
     var data = WeatherData()
+    var IPAddress: String? = nil
     
     // MARK: IBOutlets
     @IBOutlet weak var tempDataLabel: UILabel!
@@ -25,7 +26,35 @@ class ViewController: UIViewController {
     
     // MARK: IBActions
     @IBAction func updateDataValues(_ sender: UIButton) {
-        requestDataFromServer(urlToRequestStr: "http://192.168.1.200")
+        
+        if let auxIP = self.IPAddress {
+            requestDataFromServer(urlToRequestStr: "http://\(auxIP)")
+        } else {
+            let alert = UIAlertController(title: "There isn't a specific IP", message: "Try to add one", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
+        
+        
+    }
+    @IBAction func enterIPAddress(_ sender: UIButton) {
+        
+        let IPAlert = UIAlertController(title: "Enter an IP:", message: "Without http://", preferredStyle: .alert)
+        IPAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        IPAlert.addTextField(configurationHandler: { texField in
+            texField.placeholder = "Input your IP Address here..."
+            
+        })
+        
+        IPAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            if let newIP = IPAlert.textFields?.first?.text {
+                self.IPAddress = newIP
+                sender.setTitle("IP: \(newIP)", for: .normal)
+            }
+        }))
+        
+        self.present(IPAlert, animated: true)
+        
     }
     
     
@@ -78,15 +107,17 @@ class ViewController: UIViewController {
     
     func getNumberAfter(indentifier:String, in auxString:String, lenOfData:Int) -> Double {
         
-        // FIXME: Possible error if the indentifier doesn't exist
-        let tempRange = auxString.range(of: indentifier)
+        if let tempRange = auxString.range(of: indentifier) {
+            
+            let startTempIndex = auxString.index(tempRange.upperBound, offsetBy: 1)
+            let endTempIndex = auxString.index(tempRange.upperBound, offsetBy: lenOfData + 1)
+            let newRange = startTempIndex..<endTempIndex
+            let tempStr = auxString[newRange]
+            return Double(tempStr)!
+        }
         
-        let startTempIndex = auxString.index(tempRange!.upperBound, offsetBy: 1)
-        let endTempIndex = auxString.index(tempRange!.upperBound, offsetBy: lenOfData + 1)
-        let newRange = startTempIndex..<endTempIndex
-        let tempStr = auxString[newRange]
-        let tempDouble = Double(tempStr)
-        return tempDouble!
+        return  0.0
+        
     }
     
     
@@ -103,7 +134,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        requestDataFromServer(urlToRequestStr: "http://192.168.1.200")
+        //requestDataFromServer(urlToRequestStr: "http://192.168.1.200")
     }
 
     override func didReceiveMemoryWarning() {
